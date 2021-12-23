@@ -1,0 +1,7 @@
+{
+    "require": {
+        "codeigniter4/framework": "^4.1",
+        "twig/twig": "^3.3",
+        "phpmailer/phpmailer": "^6.5"
+    }
+}
