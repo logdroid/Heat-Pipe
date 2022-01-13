@@ -23,7 +23,7 @@ class Datapoints extends Model
 
     // Dates
     protected $useTimestamps = false;
-    protected $dateFormat    = 'timestamp';
+    protected $dateFormat    = 'int';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
@@ -59,7 +59,9 @@ class Datapoints extends Model
 			'temperature' => $data['temp'],
 			'timestamp' => $data['time']
 		];
-		return $this->insert($db_array);
+		$q = $this->insert($db_array);
+		log_message('debug', $db_array['timestamp']);
+		return $q;
 	}
 
 		/**
@@ -71,9 +73,22 @@ class Datapoints extends Model
 	 **/
 	public function getDatapointRange($node_id, $range)
 	{
-		$this->where('node_id', $node_id);
-		$this->where('timestamp >=', $range);
+		$this->where('node_id', $node_id)->
+		where('timestamp >=', $range)->
+		select('temperature')->
+		select('timestamp');
 		return $this->findAll();
+	}
+	
+	public function buildTimestamps($cur, $range)
+	{
+		$stamps = [];
+		$c = $cur;
+		while($c >= $range){
+			$c - 60;
+			array_push($stamps, $c);
+		}
+		return $stamps;
 	}
 
 }
