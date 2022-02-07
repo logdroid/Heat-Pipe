@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Datapoints extends Model
+class DatapointModel extends Model
 {
     protected $DBGroup          = 'default';
     protected $table            = 'datapoints';
@@ -15,15 +15,12 @@ class Datapoints extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-		'id',
-		'node_id',
-		'temperature',
-		'timestamp'
+		'id', 'node_id', 'temperature', 'timestamp'
 	];
 
     // Dates
     protected $useTimestamps = false;
-    protected $dateFormat    = 'int';
+    protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
@@ -31,7 +28,7 @@ class Datapoints extends Model
     // Validation
     protected $validationRules      = [];
     protected $validationMessages   = [];
-    protected $skipValidation       = true;
+    protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
     // Callbacks
@@ -45,50 +42,16 @@ class Datapoints extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-	/**
-	 * Save node datapoint to database
-	 *
-	 * @param mixed $data array data captured from node
-	 * @return mixed
-	 * @throws conditon
-	 **/
-	public function createDatapoint(array $data)
+	public function create($node_id, $temp, $timestamp)
 	{
-		$db_array = [
-			'node_id' => $data['id'],
-			'temperature' => $data['temp'],
-			'timestamp' => $data['time']
+		$data = [
+			'node_id' => $node_id,
+			'temperature' => $temp,
+			'timestamp' => $timestamp
 		];
-		$q = $this->insert($db_array);
-		#log_message('debug', $db_array['timestamp']);
-		return $q;
+		return $this->insert($data);
 	}
 
-		/**
-	 * Save node datapoint to database
-	 *
-	 * @param mixed $data array data captured from node
-	 * @return bool
-	 * @throws conditon
-	 **/
-	public function getDatapointRange($node_id, $range)
-	{
-		$this->where('node_id', $node_id)->
-		where('timestamp >=', $range)->
-		select('temperature')->
-		select('timestamp');
-		return $this->findAll();
-	}
-	
-	public function buildTimestamps($cur, $range)
-	{
-		$stamps = [];
-		$c = $cur;
-		while($c >= $range){
-			$c - 60;
-			array_push($stamps, $c);
-		}
-		return $stamps;
-	}
+
 
 }

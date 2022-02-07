@@ -42,7 +42,7 @@
 
 		function update_chart() {
 			var settings = {
-				"url": "http://10.3.0.1:8080/api/chart/group/6cba910764ddd058e010e41a7e80f322/12",
+				"url": "<?=base_url()?>/api/chart/group/6cba910764ddd058e010e41a7e80f322/12",
 				"method": "GET",
 				"timeout": 0,
 			};
