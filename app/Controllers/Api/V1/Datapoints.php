@@ -23,7 +23,7 @@ class Datapoints extends ResourceController
 				'message' => 'No data avaiable though this, please use an endpoint'
 			]
 		];
-		return $this->response->setJSON(json_encode($return, JSON_PRETTY_PRINT));
+		return $this->response->setJSON(json_encode($return, ENVIRONMENT == "production" ?: JSON_PRETTY_PRINT));
     }
 
 	    /**
@@ -52,10 +52,10 @@ class Datapoints extends ResourceController
 			$return['node ID'] = $data['id'];
 			$return['success'] = false;
 			$return['error']['message'] = $e->getMessage();
-			log_message('debug', json_encode($return, JSON_PRETTY_PRINT));
+			log_message('debug', json_encode($return, ENVIRONMENT == "production" ?: JSON_PRETTY_PRINT));
 		}
 
-		return $this->response->setJSON(json_encode($return, JSON_PRETTY_PRINT));
+		return $this->response->setJSON(json_encode($return, ENVIRONMENT == "production" ?: JSON_PRETTY_PRINT));
 	}
 
 	public function key($node_id)
@@ -64,7 +64,7 @@ class Datapoints extends ResourceController
 
 		$return['key'] = $this->NodekeysModel->createKey($node_id);
 		
-		return $this->response->setJSON(json_encode($return, JSON_PRETTY_PRINT));
+		return $this->response->setJSON(json_encode($return, ENVIRONMENT == "production" ?: JSON_PRETTY_PRINT));
 	}
 
 	// eaf223dbf83e00655d9457c27b4942e7

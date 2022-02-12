@@ -4,20 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class NodeModel extends Model
+class UserModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'nodes';
+    protected $table            = 'users';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
-    protected $protectFields    = true;
-    protected $allowedFields    = [
-		'id', 'name', 'owner', 'color', 'status',
-		'created_at', 'updated_at', 'deleted_at'
-	];
+    protected $protectFields    = false;
+    protected $allowedFields    = [];
 
     // Dates
     protected $useTimestamps = true;
@@ -43,24 +40,35 @@ class NodeModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-	public function getNameByID($id)
+	public function FindUser($ident)
 	{
-
+		if($data = $this->where('email', $ident)->orWhere('username', $ident)->findAll())
+		{
+			return $data[0];
+		} else {
+			return false;
+		}
 	}
 
-	public function getStatusByID($id)
+	public function FindUserByID($user_id)
 	{
-
+		if($data = $this->where('id', $user_id)->findAll())
+		{
+			return $data[0];
+		} else {
+			return false;
+		}
 	}
 
-	public function getAllByID($id)
+	public function GetAllUsers()
 	{
-		return $this->where('id', $id)->findAll();
+		$users = $this->findAll();
+		foreach($users as $index => $user)
+		{
+			unset($users[$index]['password']);
+			unset($users[$index]['totp_token']);
+		}
+		return $users;
 	}
-
-	public function GetAllByOwner($user_id)
-	{
-		return $this->where('owner', $user_id)->findAll();
-	}
-
+	
 }

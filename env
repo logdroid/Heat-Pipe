@@ -135,9 +135,9 @@
 # PHPMailer
 #--------------------------------------------------------------------
 
-# app.mailer.from = 
-# app.mailer.username = 
-# app.mailer.password = 
-# app.mailer.smtp.server = 
-# app.mailer.smtp.port = 
-# app.mailer.smtp.crypto = 
+# app.mailer.from =
+# app.mailer.username =
+# app.mailer.password =
+# app.mailer.smtp.server =
+# app.mailer.smtp.port =
+# app.mailer.smtp.crypto =
